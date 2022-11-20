@@ -1,4 +1,4 @@
-import { db } from "./api/config";
+import { db } from "./pages/api/config";
 import { collection, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
@@ -17,7 +17,7 @@ function Display(props) {
             }
         };
         getData();
-    }, [])
+    })
 
     return (
         <div >

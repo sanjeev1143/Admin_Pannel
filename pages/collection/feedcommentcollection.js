@@ -1,18 +1,11 @@
 import { useState } from "react"
 import Index from "."
 import { db } from "../api/config";
-import Display from "../Display"
-import { addDoc, collection, deleteDoc, doc } from "firebase/firestore";
+import Display from "../../Display"
+import { addDoc, collection, deleteDoc, doc, updateDoc } from "firebase/firestore";
 
-class FeedCommentCollection {
-    constructor(comment, feedID, time, uid, usernameList) {
-        this.comment = comment
-        this.feedID = feedID
-        this.time = time
-        this.uid = uid
-        this.usernameList = usernameList
-    }
-}
+
+
 
 function Feedcommentcollection() {
     const [data, setData] = useState([]);
@@ -42,6 +35,10 @@ function Feedcommentcollection() {
         await deleteDoc(userDoc);
         setData(data);
     }
+    async function update(id) {
+        // const userDoc = doc(Db, "Notes", props.id)
+        // await updateDoc(userDoc, change)
+    }
     return (
         <div>
             <Index />
@@ -54,6 +51,7 @@ function Feedcommentcollection() {
                     <h1>uid:{val.uid}</h1>
                     <h1>usernameList:{val.usernameList}</h1>
                     <button onClick={() => Dlt(val.id)}>Delete</button>
+                    <button onClick={update}>Update</button>
 
                     <hr />
                 </div>

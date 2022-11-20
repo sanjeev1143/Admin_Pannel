@@ -1,7 +1,7 @@
 import { useState } from "react"
 import Index from "."
 import { db } from "../api/config";
-import Display from "../Display"
+import Display from "../../Display"
 import { addDoc, collection, deleteDoc, doc, updateDoc } from "firebase/firestore";
 updateDoc
 
