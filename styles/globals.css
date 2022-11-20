@@ -1,0 +1,32 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+
+}
+
+.offcanva {
+  background-color: black;
+  color: white;
+  display: flex;
+  margin: 0;
+  padding: 0;
+  flex-direction: column;
+  text-decoration: none;
+}
+
+.navItem {
+  color: white;
+}
+
+.get {
+  height: 50vh;
+  width: 95vw;
+  border: 1px solid gray;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
