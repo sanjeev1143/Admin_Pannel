@@ -29,15 +29,15 @@ function CohortStoreFeedback() {
             Instructor_Rate: "", Thumb: "", Topic_Rate: "", otherSuggestion: "",
         })
     }
-    async function Dlt(id) {
-        const userDoc = doc(db, "CohortStoreFeedback", id);
-        await deleteDoc(userDoc);
-        setData(data);
-    }
-    async function update(id) {
-        // const userDoc = doc(Db, "Notes", props.id)
-        // await updateDoc(userDoc, change)
-    }
+    // async function Dlt(id) {
+    //     const userDoc = doc(db, "CohortStoreFeedback", id);
+    //     await deleteDoc(userDoc);
+    //     setData(data);
+    // }
+    // async function update(id) {
+    //     // const userDoc = doc(Db, "Notes", props.id)
+    //     // await updateDoc(userDoc, change)
+    // }
     return (
         <div>
             <Index />

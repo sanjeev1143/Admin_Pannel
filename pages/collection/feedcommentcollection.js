@@ -57,7 +57,7 @@ function Feedcommentcollection() {
                 </div>
             ))}
 
-            <form>
+            {/* <form>
                 <label>comment</label>
                 <input type="text" name="comment" onChange={changed} value={info.comment} />
                 <label>feedID</label>
@@ -69,7 +69,7 @@ function Feedcommentcollection() {
                 <label>usernameList</label>
                 <input type="text" name="usernameList" onChange={changed} value={info.usernameList} />
                 <button onClick={saveDt}>Save</button>
-            </form>
+            </form> */}
         </div>
     )
 }

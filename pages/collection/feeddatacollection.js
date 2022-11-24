@@ -57,7 +57,7 @@ function Feeddatacollection() {
                 </div>
             ))}
 
-            <form>
+            {/* <form>
                 <label>feedBoxList</label>
                 <input type="text" name="feedBoxList" onChange={changed} value={info.feedBoxList} />
                 <label>feedID</label>
@@ -69,7 +69,7 @@ function Feeddatacollection() {
                 <label>usernameList</label>
                 <input type="text" name="usernameList" onChange={changed} value={info.usernameList} />
                 <button onClick={saveDt}>Save</button>
-            </form>
+            </form> */}
         </div>
     )
 }

@@ -45,12 +45,15 @@ function Cohortactivity() {
             <Display save={save} clname='cohortActivity' />
             {data.map((val, ind) => (
                 <div key={ind}>
+                    <h1>cohortDate:{val.cohortHead}</h1>
+                    <h1>cohortDateAndTime:{val.cohortHead}</h1>
                     <h1>cohortHead:{val.cohortHead}</h1>
                     <h1>cohortSpeakerImageUrl:{val.cohortSpeakerImageUrl}</h1>
                     <h1>cohortSubHead:{val.cohortSubHead}</h1>
                     <h1>cohortTitle:{val.cohortTitle}</h1>
                     <h1>cohortUrl:{val.cohortUrl}</h1>
                     <h1>cohortZoom:{val.cohortZoom}</h1>
+                    <h1>feedbackStart{val.cohortZoom}</h1>
                     <h1>mainPara:{val.mainPara}</h1>
                     <h1>profName:{val.profName}</h1>
                     <h1>profTitle:{val.profTitle}</h1>

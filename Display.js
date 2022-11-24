@@ -17,7 +17,7 @@ function Display(props) {
             }
         };
         getData();
-    })
+    }, [])
 
     return (
         <div >

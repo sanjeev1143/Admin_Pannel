@@ -32,8 +32,8 @@ function Negative() {
         setData(data);
     }
     async function update(id) {
-        // const userDoc = doc(Db, "Notes", props.id)
-        // await updateDoc(userDoc, change)
+        const userDoc = doc(db, "negative", "Anger")
+        await updateDoc(userDoc, change)
     }
     return (
         <div>
@@ -41,8 +41,19 @@ function Negative() {
             <Display save={save} clname='negative' />
             {data.map((val, ind) => (
                 <div key={ind}>
-                    <h1>description:{val.description}</h1>
-                    <h1>title:{val.title}</h1>
+                    <h1>Journal:{val.Journal}</h1>
+                    <h1>Relief:{val.Relief}</h1>
+                    <h1>breathe:{val.breathe}</h1>
+                    <h1>breatheTitle:{val.breatheTitle}</h1>
+                    <h1>extraCard:{val.extraCard}</h1>
+                    <h1>extraCard2:{val.extraCard2}</h1>
+                    <h1>extraCard2Title:{val.extraCard2Title}</h1>
+                    <h1>extraCard3:{val.extraCard3}</h1>
+                    <h1>extraCard3Title:{val.extraCard3Title}</h1>
+                    <h1>extraCardTitle:{val.extraCardTitle}</h1>
+                    <h1>lemon:{val.lemon}</h1>
+                    <h1>lemonTitle:{val.lemonTitle}</h1>
+                    <h1>ytEmbeed:{val.ytEmbeed}</h1>
                     <button onClick={() => Dlt(val.id)}>Delete</button>
                     <button onClick={update}>Update</button>
 
@@ -61,3 +72,5 @@ function Negative() {
 }
 
 export default Negative
+
+

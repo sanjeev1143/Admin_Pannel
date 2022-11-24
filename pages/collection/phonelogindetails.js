@@ -56,7 +56,7 @@ function Phonelogindetails() {
                 </div>
             ))}
 
-            <form>
+            {/* <form>
                 <label>dob</label>
                 <input type="text" name="dob" onChange={changed} value={info.dob} />
                 <label>email</label>
@@ -68,7 +68,7 @@ function Phonelogindetails() {
                 <label>usernameList</label>
                 <input type="text" name="usernameList" onChange={changed} value={info.usernameList} />
                 <button onClick={saveDt}>Save</button>
-            </form>
+            </form> */}
         </div>
     )
 }

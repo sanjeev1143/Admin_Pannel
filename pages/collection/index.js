@@ -24,13 +24,17 @@ function Index() {
                     <hr />
                     <Link href="/collection/feeddatacollection" style={{ textDecoration: 'none' }}><div className="navItem">feedDataCollection</div></Link>
                     <hr />
-                    <Link href="/collection/journaldatacollection" style={{ textDecoration: 'none' }}><div className="navItem">journalDataCollection</div></Link>
+                    <Link href="/collection/negativelemon" style={{ textDecoration: 'none' }}><div className="navItem">negativelemon</div></Link>
+                    <hr />
+                    <Link href="/collection/negativebreathe" style={{ textDecoration: 'none' }}><div className="navItem">negativebreathe</div></Link>
                     <hr />
                     <Link href="/collection/negative" style={{ textDecoration: 'none' }}><div className="navItem">negative</div></Link>
                     <hr />
                     <Link href="/collection/phonelogindetails" style={{ textDecoration: 'none' }}><div className="navItem">phoneLoginDetails</div></Link>
                     <hr />
                     <Link href="/collection/storefeedback" style={{ textDecoration: 'none' }}><div className="navItem">storeFeedback</div></Link>
+                    <hr />
+                    <Link href="/collection/letter" style={{ textDecoration: 'none' }}><div className="navItem">letter</div></Link>
                     <hr />
                     <Link href="/collection/ytlink" style={{ textDecoration: 'none' }}><div className="navItem">ytLink</div></Link>
                 </div>

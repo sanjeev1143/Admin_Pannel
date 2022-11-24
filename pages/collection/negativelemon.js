@@ -5,13 +5,13 @@ import Display from "../../Display"
 import { addDoc, collection, deleteDoc, doc, updateDoc } from "firebase/firestore";
 
 
-function Journaldatacollection() {
+function NegativeLemon() {
     const [data, setData] = useState([]);
 
     const [info, setInfo] = useState({
-        createdTime: "", createdTime2: "", description: "", title: "", userID: "",
+        bullet1: "", bullet2: "", bullet3: "", bullet4: "", bullet5: "", output: "", title: ""
     })
-    const dbRef = collection(db, "journalDataCollection");
+    const dbRef = collection(db, "negative_lemon");
     function save(val) {
         setData(val)
     }
@@ -29,7 +29,7 @@ function Journaldatacollection() {
         })
     }
     async function Dlt(id) {
-        const userDoc = doc(db, "journalDataCollection", id);
+        const userDoc = doc(db, "negative_lemon", id);
         await deleteDoc(userDoc);
         setData(data);
     }
@@ -40,34 +40,41 @@ function Journaldatacollection() {
     return (
         <div>
             <Index />
-            <Display save={save} clname='journalDataCollection' />
+            <Display save={save} clname='negative_lemon' />
             {data.map((val, ind) => (
                 <div key={ind}>
-                    <h1>createdTime:{val.createdTime}</h1>
-                    <h1>createdTime2:{val.createdTime2}</h1>
-                    <h1>description:{val.description}</h1>
+                    <h1>bullet1:{val.bullet1}</h1>
+                    <h1>bullet2:{val.bullet2}</h1>
+                    <h1>bullet3:{val.createdTime2}</h1>
+                    <h1>bullet4:{val.bullet4}</h1>
+                    <h1>bullet5:{val.bullet5}</h1>
+                    <h1>output:{val.output}</h1>
                     <h1>title:{val.title}</h1>
-                    <h1>userID:{val.userID}</h1>
                     <button onClick={() => Dlt(val.id)}>Delete</button>
                     <button onClick={update}>Update</button>
 
                 </div>
             ))}
             <form>
-                <label>createdTime</label>
-                <input type="text" name="createdTime" onChange={changed} value={info.createdTime} />
-                <label>createdTime2</label>
-                <input type="text" name="createdTime2" onChange={changed} value={info.createdTime2} />
-                <label>description</label>
-                <input type="text" name="description" onChange={changed} value={info.description} />
+                <label>bullet1</label>
+                <input type="text" name="bullet1" onChange={changed} value={info.bullet1} />
+                <label>bullet2</label>
+                <input type="text" name="bullet2" onChange={changed} value={info.bullet2} />
+                <label>bullet3</label>
+                <input type="text" name="bullet3" onChange={changed} value={info.bullet3} />
+                <label>bullet4</label>
+                <input type="text" name="bullet4" onChange={changed} value={info.bullet4} />
+                <label>bullet5</label>
+                <input type="text" name="bullet5" onChange={changed} value={info.bullet5} />
+
+                <label>output</label>
+                <input type="text" name="para" onChange={changed} value={info.para} />
                 <label>title</label>
                 <input type="text" name="title" onChange={changed} value={info.title} />
-                <label>userID</label>
-                <input type="text" name="userID" onChange={changed} value={info.userID} />
                 <button onClick={saveDt}>Save</button>
             </form>
         </div>
     )
 }
 
-export default Journaldatacollection
+export default NegativeLemon

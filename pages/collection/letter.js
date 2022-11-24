@@ -5,14 +5,13 @@ import Display from "../../Display"
 import { addDoc, collection, deleteDoc, doc, updateDoc } from "firebase/firestore";
 
 
-
-function Storefeedback() {
-
+function Letter() {
     const [data, setData] = useState([]);
+
     const [info, setInfo] = useState({
-        otherSuggestion: "", selectedSuggestions: "", stars: "",
+        letter: ""
     })
-    const dbRef = collection(db, "storeFeedback");
+    const dbRef = collection(db, "letter");
     function save(val) {
         setData(val)
     }
@@ -26,46 +25,41 @@ function Storefeedback() {
         e.preventDefault();
         const data = await addDoc(dbRef, info)
         setInfo({
-            otherSuggestion: "", selectedSuggestions: "", stars: "",
+            letter: ""
         })
     }
+
     async function Dlt(id) {
-        const userDoc = doc(db, "storeFeedback", id);
+        const userDoc = doc(db, "letter", id);
         await deleteDoc(userDoc);
         setData(data);
     }
-
     async function update(id) {
         // const userDoc = doc(Db, "Notes", props.id)
         // await updateDoc(userDoc, change)
     }
 
+    console.log(data);
     return (
         <div>
             <Index />
-            <Display save={save} clname='storeFeedback' />
+            <Display save={save} clname='letter' />
             {data.map((val, ind) => (
                 <div key={ind}>
-                    <h1>otherSuggestion:{val.otherSuggestion}</h1>
-                    <h1>selectedSuggestions:{val.selectedSuggestions}</h1>
-                    <h1>stars:{val.stars}</h1>
+                    <h1>letter:{val.letter}</h1>
                     <button onClick={() => Dlt(val.id)}>Delete</button>
                     <button onClick={update}>Update</button>
 
                 </div>
             ))}
 
-            {/* <form>
-                <label>otherSuggestion</label>
-                <input type="text" name="otherSuggestion" onChange={changed} value={info.otherSuggestion} />
-                <label>selectedSuggestions</label>
-                <input type="text" name="selectedSuggestions" onChange={changed} value={info.selectedSuggestions} />
-                <label>stars</label>
-                <input type="text" name="stars" onChange={changed} value={info.stars} />
+            <form>
+                <label>letter</label>
+                <input type="text" name="letter" onChange={changed} value={info.letter} />
                 <button onClick={saveDt}>Save</button>
-            </form> */}
+            </form>
         </div>
     )
 }
 
-export default Storefeedback
+export default Letter
