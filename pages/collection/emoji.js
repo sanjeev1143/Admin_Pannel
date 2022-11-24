@@ -1,111 +1,114 @@
-import { useEffect, useState } from "react"
-import Index from "."
+import { useEffect, useState } from "react";
+import Index from ".";
 import { db } from "../api/config";
-import Display from "../../Display"
-import { addDoc, collection, deleteDoc, doc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc } from "firebase/firestore";
 import styles from "../../styles/Emoji.module.css";
-import { getEmojis } from "../../api"
-
-
+import { getEmojis } from "../../api";
 
 function Emoji() {
-    const emojis = ["Happy",
-        "Sad",
-        "Anger",
-        "Love",
-        "Rage",
-        "Surprise",
-        "Grief",
-        "Gloomy",
-        "Anxiety",
-        "Annoyance",
-        "Upset",
-        "Trauma",
-        "Shock",
-        "Excited",
-        "Optimistic",
-        "Confident",
-        "Irritation",
-        "Jealousy",
-        "Fear",
-        "Uncertain",
-        "Hopeful",
-        "Panic",
-        "Paranoid",
-        "Regret",
-        "Possessive",
-        "Guilt",
-        "Terror",
-        "Motivated",
-    ]
-
-    const [emojisInDB, setEmojisInDB] = useState([])
+    const [emojis, setEmojis] = useState([
+        { emotion: "Happy", id: null },
+        { emotion: "Sad", id: null },
+        { emotion: "Anger", id: null },
+        { emotion: "Love", id: null },
+        { emotion: "Rage", id: null },
+        { emotion: "Surprise", id: null },
+        { emotion: "Grief", id: null },
+        { emotion: "Gloomy", id: null },
+        { emotion: "Anxiety", id: null },
+        { emotion: "Annoyance", id: null },
+        { emotion: "Upset", id: null },
+        { emotion: "Trauma", id: null },
+        { emotion: "Shock", id: null },
+        { emotion: "Excited", id: null },
+        { emotion: "Optimistic", id: null },
+        { emotion: "Confident", id: null },
+        { emotion: "Irritation", id: null },
+        { emotion: "Jealousy", id: null },
+        { emotion: "Fear", id: null },
+        { emotion: "Uncertain", id: null },
+        { emotion: "Hopeful", id: null },
+        { emotion: "Panic", id: null },
+        { emotion: "Paranoid", id: null },
+        { emotion: "Regret", id: null },
+        { emotion: "Possessive", id: null },
+        { emotion: "Guilt", id: null },
+        { emotion: "Terror", id: null },
+        { emotion: "Motivated", id: null },
+    ]);
 
     useEffect(() => {
         const run = async () => {
             const response = await getEmojis();
-            setEmojisInDB(response.map(res => res.emotion))
-            setData(response);
-            console.log(response)
-        }
+            const temp = [...emojis];
+
+            for (let i = 0; i < response.length; i++) {
+                for (let j = 0; j < temp.length; j++) {
+                    if (response[i].emotion == temp[j].emotion) {
+                        temp[j].id = response[i].id;
+                        break;
+                    }
+                }
+            }
+
+            setEmojis(temp);
+        };
 
         run();
-    }, [])
+    }, []);
 
-    const [data, setData] = useState([]);
-
-    const [info, setInfo] = useState({
-        emotion: ""
-    })
-    const dbRef = collection(db, "emoji");
-    function save(val) {
-        setData(val)
-    }
-
-
-
-    async function update(e) {
-        const res = emojisInDB.includes(e.target.value)
-        const id = data.filter((val) => e.target.name === val.emotion)
-        const key = (id[0].id);
-        console.log(res)
-
-
-        if (res) {
-            console.log("comming");
-            const userDoc = doc(db, "emoji", key);
+    const update = async (val) => {
+        if (!!val.id) {
+            const userDoc = doc(db, "emoji", val.id);
             await deleteDoc(userDoc);
-            const temp = emojisInDB.splice(emojisInDB.indexOf(e.target.name), 1)
-            setEmojisInDB(temp);
+
+            const temp = [...emojis];
+            for (let i = 0; i < temp.length; i++) {
+                if (temp[i].emotion === val.emotion) {
+                    temp[i].id = null;
+                    break;
+                }
+            }
+            setEmojis(temp);
         } else {
-            const data = await addDoc(dbRef, { emotion: e.target.name })
-            setEmojisInDB([...emojisInDB, e.target.name])
+            const dbRef = collection(db, "emoji");
+            const data = await addDoc(dbRef, { emotion: val.emotion });
+
+            const temp = [...emojis];
+            for (let i = 0; i < temp.length; i++) {
+                if (temp[i].emotion === val.emotion) {
+                    temp[i].id = data.id;
+                    break;
+                }
+            }
+            setEmojis(temp);
         }
-        console.log(e.target.value);
-    }
+    };
+
     return (
         <div className={styles.main}>
             <Index />
-            <Display save={save} clname='emoji' />
 
             <table>
                 <tr>
                     <th>Emotion</th>
                     <th>Show</th>
                 </tr>
-                {emojis.map((name, i) => (
+                {emojis.map((val, i) => (
                     <tr key={i}>
-                        <td>{name}</td>
+                        <td>{val.emotion}</td>
                         <td>
-                            <input type="checkbox" checked={emojisInDB.includes(name)} name={name} onChange={update} />
+                            <input
+                                type="checkbox"
+                                checked={!!val.id}
+                                onChange={() => update(val)}
+                            />
                         </td>
                     </tr>
                 ))}
             </table>
-
-
         </div>
-    )
+    );
 }
 
-export default Emoji
+export default Emoji;
