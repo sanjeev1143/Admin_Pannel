@@ -6,6 +6,8 @@ import styles from "../../styles/Emoji.module.css";
 import { getEmojis } from "../../api";
 
 function Emoji() {
+    const [loading, setLoading] = useState(false);
+
     const [emojis, setEmojis] = useState([
         { emotion: "Happy", id: null },
         { emotion: "Sad", id: null },
@@ -39,6 +41,8 @@ function Emoji() {
 
     useEffect(() => {
         const run = async () => {
+            setLoading(true);
+
             const response = await getEmojis();
             const temp = [...emojis];
 
@@ -52,12 +56,16 @@ function Emoji() {
             }
 
             setEmojis(temp);
+
+            setLoading(false);
         };
 
         run();
     }, []);
 
     const update = async (val) => {
+        setLoading(true);
+
         if (!!val.id) {
             const userDoc = doc(db, "emoji", val.id);
             await deleteDoc(userDoc);
@@ -83,6 +91,8 @@ function Emoji() {
             }
             setEmojis(temp);
         }
+
+        setLoading(false);
     };
 
     return (
@@ -101,6 +111,7 @@ function Emoji() {
                             <input
                                 type="checkbox"
                                 checked={!!val.id}
+                                disabled={loading}
                                 onChange={() => update(val)}
                             />
                         </td>

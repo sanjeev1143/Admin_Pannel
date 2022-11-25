@@ -1,32 +1,29 @@
 html,
 body {
-  padding: 0;
-  margin: 0;
+    padding: 0;
+    margin: 0;
+}
 
+* {
+    box-sizing: border-box;
 }
 
 .offcanva {
-  background-color: black;
-  color: white;
-  display: flex;
-  margin: 0;
-  padding: 0;
-  flex-direction: column;
-  text-decoration: none;
+    background-color: black;
+    color: white;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    flex-direction: column;
+    text-decoration: none;
 }
 
 .navItem {
-  color: white;
+    color: white;
 }
 
 .get {
-  height: 50vh;
-  width: 95vw;
-  border: 1px solid gray;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+    height: 50vh;
+    width: 95vw;
+    border: 1px solid gray;
 }
