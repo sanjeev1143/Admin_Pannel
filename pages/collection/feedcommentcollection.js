@@ -1,77 +1,80 @@
-import { useState } from "react"
-import Index from "."
+import { useState, useEffect } from "react";
+import Index from ".";
 import { db } from "../api/config";
-import Display from "../../Display"
-import { addDoc, collection, deleteDoc, doc, updateDoc } from "firebase/firestore";
+import { deleteDoc, doc } from "firebase/firestore";
+import { getData } from "../../api";
+import styles from "../../styles/FeedComments.module.css";
 
+const Feedcommentcollection = () => {
+    const [comments, setComments] = useState([]);
+    const [loading, setLoading] = useState(false);
 
+    useEffect(() => {
+        const run = async () => {
+            const response = await getData("feedCommentCollection");
+            setComments(response);
+        };
 
+        run();
+    }, []);
 
-function Feedcommentcollection() {
-    const [data, setData] = useState([]);
+    const handleDelete = async (id) => {
+        setLoading(true);
 
-    const [info, setInfo] = useState({
-        comment: "", feedID: "", time: "", uid: "", usernameList: "",
-    })
-    const dbRef = collection(db, "feedCommentCollection");
-    function save(val) {
-        setData(val)
-    }
-    function changed(e) {
-        setInfo((prv) => ({
-            ...prv, [e.target.name]: e.target.value
-        }))
-        console.log(info);
-    }
-    async function saveDt(e) {
-        e.preventDefault();
-        const data = await addDoc(dbRef, info)
-        setInfo({
-            comment: "", feedID: "", time: "", uid: "", usernameList: "",
-        })
-    }
-    async function Dlt(id) {
         const userDoc = doc(db, "feedCommentCollection", id);
         await deleteDoc(userDoc);
-        setData(data);
-    }
-    async function update(id) {
-        // const userDoc = doc(Db, "Notes", props.id)
-        // await updateDoc(userDoc, change)
-    }
+
+        const temp = [...comments];
+        for (let i = 0; i < temp.length; i++) {
+            if (temp[i].id === id) {
+                temp.splice(i, 1);
+                break;
+            }
+        }
+        setComments(temp);
+
+        setLoading(false);
+    };
+
     return (
-        <div>
+        <div className={styles.main}>
             <Index />
-            <Display save={save} clname='feedCommentCollection' />
-            {data.map((val, ind) => (
-                <div key={ind}>
-                    <h1>comment:{val.comment}</h1>
-                    <h1>feedID:{val.feedID}</h1>
-                    <h1>time:{val.time}</h1>
-                    <h1>uid:{val.uid}</h1>
-                    <h1>usernameList:{val.usernameList}</h1>
-                    <button onClick={() => Dlt(val.id)}>Delete</button>
-                    <button onClick={update}>Update</button>
 
-                    <hr />
-                </div>
-            ))}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feed ID</th>
+                        <th>User ID</th>
+                        <th>Comment</th>
+                        <th>Time</th>
+                        <th>Username List</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
 
-            {/* <form>
-                <label>comment</label>
-                <input type="text" name="comment" onChange={changed} value={info.comment} />
-                <label>feedID</label>
-                <input type="text" name="feedID" onChange={changed} value={info.feedID} />
-                <label>time</label>
-                <input type="text" name="time" onChange={changed} value={info.time} />
-                <label>uid</label>
-                <input type="text" name="uid" onChange={changed} value={info.uid} />
-                <label>usernameList</label>
-                <input type="text" name="usernameList" onChange={changed} value={info.usernameList} />
-                <button onClick={saveDt}>Save</button>
-            </form> */}
+                <tbody>
+                    {comments.map((comment) => (
+                        <tr key={comment.id}>
+                            <td>{comment.feedID}</td>
+                            <td>{comment.uid}</td>
+                            <td>{comment.comment}</td>
+                            <td>{new Date(comment.time).toLocaleString()}</td>
+                            <td>{comment.usernameList}</td>
+                            <td>
+                                <button
+                                    type="button"
+                                    onClick={() => handleDelete(comment.id)}
+                                    disabled={loading}
+                                >
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
-    )
-}
+    );
+};
 
-export default Feedcommentcollection
+export default Feedcommentcollection;

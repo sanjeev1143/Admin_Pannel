@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Index from ".";
-import { getCohortFeedback } from "../../api";
+import { getData } from "../../api";
 import styles from "../../styles/CohortFeedback.module.css";
 
 const CohortStoreFeedback = () => {
@@ -8,7 +8,7 @@ const CohortStoreFeedback = () => {
 
     useEffect(() => {
         const run = async () => {
-            const response = await getCohortFeedback();
+            const response = await getData("CohortStoreFeedbacks");
             setFeedbacks(response);
         };
 

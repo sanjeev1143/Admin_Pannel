@@ -5,7 +5,7 @@ import { storage } from "../api/config";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import styles from "../../styles/Cohort.module.css";
 import { addDoc, collection, deleteDoc, doc } from "firebase/firestore";
-import { getCohortActivity } from "../../api";
+import { getData } from "../../api";
 
 function Cohortactivity() {
     const [cohortAs, setCohortAs] = useState([]);
@@ -32,7 +32,7 @@ function Cohortactivity() {
 
     useEffect(() => {
         const run = async () => {
-            const response = await getCohortActivity();
+            const response = await getData("cohortActivity");
             setCohortAs(response);
         };
 

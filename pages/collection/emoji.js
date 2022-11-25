@@ -3,7 +3,7 @@ import Index from ".";
 import { db } from "../api/config";
 import { addDoc, collection, deleteDoc, doc } from "firebase/firestore";
 import styles from "../../styles/Emoji.module.css";
-import { getEmojis } from "../../api";
+import { getData } from "../../api";
 
 function Emoji() {
     const [loading, setLoading] = useState(false);
@@ -43,7 +43,7 @@ function Emoji() {
         const run = async () => {
             setLoading(true);
 
-            const response = await getEmojis();
+            const response = await getData("emoji");
             const temp = [...emojis];
 
             for (let i = 0; i < response.length; i++) {

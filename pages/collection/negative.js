@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Index from ".";
-import { getNegative } from "../../api";
+import { getData } from "../../api";
 import { db } from "../api/config";
 import { setDoc, doc, updateDoc, deleteDoc } from "firebase/firestore";
 import styles from "../../styles/Negative.module.css";
@@ -16,7 +16,7 @@ function Negative() {
 
     useEffect(() => {
         const run = async () => {
-            const response = await getNegative();
+            const response = await getData("negative");
             setEmotionList(response);
         };
 
