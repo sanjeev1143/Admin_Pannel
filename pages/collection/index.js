@@ -73,20 +73,7 @@ function Index() {
                         <div className="navItem">feedDataCollection</div>
                     </Link>
                     <hr />
-                    <Link
-                        href="/collection/negativelemon"
-                        style={{ textDecoration: "none" }}
-                    >
-                        <div className="navItem">negativelemon</div>
-                    </Link>
-                    <hr />
-                    <Link
-                        href="/collection/negativebreathe"
-                        style={{ textDecoration: "none" }}
-                    >
-                        <div className="navItem">negativebreathe</div>
-                    </Link>
-                    <hr />
+
                     <Link
                         href="/collection/negative"
                         style={{ textDecoration: "none" }}
