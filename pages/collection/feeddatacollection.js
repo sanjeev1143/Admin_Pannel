@@ -1,77 +1,80 @@
-import { useState } from "react"
-import Index from "."
+import { useState, useEffect } from "react";
+import Index from ".";
 import { db } from "../api/config";
-import Display from "../../Display"
-import { addDoc, collection, deleteDoc, doc, updateDoc } from "firebase/firestore";
-
-
+import { deleteDoc, doc } from "firebase/firestore";
+import { getData } from "../../api";
+import styles from "../../styles/Feeds.module.css";
 
 function Feeddatacollection() {
-    const [data, setData] = useState([]);
+    const [feeds, setFeeds] = useState([]);
+    const [loading, setLoading] = useState(false);
 
-    const [info, setInfo] = useState({
-        feedBoxList: "", feedID: "", time: "", uid: "", usernameList: "",
-    })
-    const dbRef = collection(db, "feedDataCollection");
-    function save(val) {
-        setData(val)
-    }
-    function changed(e) {
-        setInfo((prv) => ({
-            ...prv, [e.target.name]: e.target.value
-        }))
-        console.log(info);
-    }
-    async function saveDt(e) {
-        e.preventDefault();
-        const data = await addDoc(dbRef, info)
-        setInfo({
-            feedBoxList: "", feedID: "", time: "", uid: "", usernameList: "",
-        })
-    }
+    useEffect(() => {
+        const run = async () => {
+            const response = await getData("feedDataCollection");
+            setFeeds(response);
+        };
 
-    async function Dlt(id) {
-        const userDoc = doc(db, "feedDataCollection", id);
-        await deleteDoc(userDoc);
-        setData(data);
-    }
+        run();
+    }, []);
 
-    async function update(id) {
-        // const userDoc = doc(Db, "Notes", props.id)
-        // await updateDoc(userDoc, change)
-    }
+    const handleDelete = async (id) => {
+        setLoading(true);
+
+        const feedDoc = doc(db, "feedDataCollection", id);
+        await deleteDoc(feedDoc);
+
+        const temp = [...feeds];
+        for (let i = 0; i < temp.length; i++) {
+            if (temp[i].id === id) {
+                temp.splice(i, 1);
+                break;
+            }
+        }
+        setFeeds(temp);
+
+        setLoading(false);
+    };
+
     return (
-        <div>
+        <div className={styles.main}>
             <Index />
-            <Display save={save} clname='feedDataCollection' />
-            {data.map((val, ind) => (
-                <div key={ind}>
-                    <h1>feedBoxList:{val.feedBoxList}</h1>
-                    <h1>feedID:{val.feedID}</h1>
-                    <h1>time:{val.time}</h1>
-                    <h1>uid:{val.uid}</h1>
-                    <h1>usernameList:{val.usernameList}</h1>
-                    <button onClick={() => Dlt(val.id)}>Delete</button>
-                    <button onClick={update}>Update</button>
 
-                </div>
-            ))}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feed ID</th>
+                        <th>User ID</th>
+                        <th>Feed</th>
+                        <th>Time</th>
+                        <th>Username List</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
 
-            {/* <form>
-                <label>feedBoxList</label>
-                <input type="text" name="feedBoxList" onChange={changed} value={info.feedBoxList} />
-                <label>feedID</label>
-                <input type="text" name="feedID" onChange={changed} value={info.feedID} />
-                <label>time</label>
-                <input type="text" name="time" onChange={changed} value={info.time} />
-                <label>uid</label>
-                <input type="text" name="uid" onChange={changed} value={info.uid} />
-                <label>usernameList</label>
-                <input type="text" name="usernameList" onChange={changed} value={info.usernameList} />
-                <button onClick={saveDt}>Save</button>
-            </form> */}
+                <tbody>
+                    {feeds.map((feed) => (
+                        <tr key={feed.id}>
+                            <td>{feed.feedID}</td>
+                            <td>{feed.uid}</td>
+                            <td>{feed.feedBoxList}</td>
+                            <td>{new Date(feed.time).toLocaleString()}</td>
+                            <td>{feed.usernameList}</td>
+                            <td>
+                                <button
+                                    type="button"
+                                    onClick={() => handleDelete(feed.id)}
+                                    disabled={loading}
+                                >
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
-    )
+    );
 }
 
-export default Feeddatacollection
+export default Feeddatacollection;
