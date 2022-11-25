@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Index from ".";
 import { getData } from "../../api";
-import styles from "../../styles/CohortFeedback.module.css";
+import styles from "../../styles/Feedback.module.css";
 
 const CohortStoreFeedback = () => {
     const [feedbacks, setFeedbacks] = useState([]);

@@ -5,7 +5,7 @@ import { deleteDoc, doc } from "firebase/firestore";
 import { getData } from "../../api";
 import styles from "../../styles/Feeds.module.css";
 
-function Feeddatacollection() {
+const Feeddatacollection = () => {
     const [feeds, setFeeds] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -75,6 +75,6 @@ function Feeddatacollection() {
             </table>
         </div>
     );
-}
+};
 
 export default Feeddatacollection;
