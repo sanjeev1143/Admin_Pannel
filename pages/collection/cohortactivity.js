@@ -50,7 +50,7 @@ function Cohortactivity() {
         let temp = [...cohortAs];
 
         for (let i = 0; i < temp.length; i++) {
-            if (temp[i].id === id) delete temp[i];
+            if (temp[i].id === id) temp.splice(i, 1);
         }
 
         setCohortAs(temp);
@@ -298,100 +298,106 @@ const CohortCard = ({ activity, onDelete }) => {
         <>
             <div className={styles.card}>
                 <table>
-                    <tr>
-                        <th>Key</th>
-                        <th>Value</th>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th>Key</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Heading</td>
+                            <td>{activity.cohortHead}</td>
+                        </tr>
 
-                    <tr>
-                        <td>Heading</td>
-                        <td>{activity.cohortHead}</td>
-                    </tr>
+                        <tr>
+                            <td>Speaker Image</td>
+                            <td>
+                                <img
+                                    src={speakerImage}
+                                    alt={activity.cohortSpeakerImageUrl}
+                                />
+                            </td>
+                        </tr>
 
-                    <tr>
-                        <td>Speaker Image</td>
-                        <td>
-                            <img
-                                src={speakerImage}
-                                alt={activity.cohortSpeakerImageUrl}
-                            />
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>Sub Heading</td>
+                            <td>{activity.cohortSubHead}</td>
+                        </tr>
 
-                    <tr>
-                        <td>Sub Heading</td>
-                        <td>{activity.cohortSubHead}</td>
-                    </tr>
+                        <tr>
+                            <td>Cohort Activty Title</td>
+                            <td>{activity.cohortTitle}</td>
+                        </tr>
 
-                    <tr>
-                        <td>Cohort Activty Title</td>
-                        <td>{activity.cohortTitle}</td>
-                    </tr>
+                        <tr>
+                            <td>Header Image</td>
+                            <td>
+                                <img
+                                    src={headerImage}
+                                    alt={activity.cohortUrl}
+                                />
+                            </td>
+                        </tr>
 
-                    <tr>
-                        <td>Header Image</td>
-                        <td>
-                            <img src={headerImage} alt={activity.cohortUrl} />
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>Zoom link</td>
+                            <td>{activity.cohortZoom}</td>
+                        </tr>
 
-                    <tr>
-                        <td>Zoom link</td>
-                        <td>{activity.cohortZoom}</td>
-                    </tr>
+                        <tr>
+                            <td>Description</td>
+                            <td>{activity.mainPara}</td>
+                        </tr>
 
-                    <tr>
-                        <td>Description</td>
-                        <td>{activity.mainPara}</td>
-                    </tr>
+                        <tr>
+                            <td>Professor Name</td>
+                            <td>{activity.profName}</td>
+                        </tr>
 
-                    <tr>
-                        <td>Professor Name</td>
-                        <td>{activity.profName}</td>
-                    </tr>
+                        <tr>
+                            <td>Professor Designation</td>
+                            <td>{activity.profTitle}</td>
+                        </tr>
 
-                    <tr>
-                        <td>Professor Designation</td>
-                        <td>{activity.profTitle}</td>
-                    </tr>
+                        <tr>
+                            <td>Fees</td>
+                            <td>{activity.sessionFees}</td>
+                        </tr>
 
-                    <tr>
-                        <td>Fees</td>
-                        <td>{activity.sessionFees}</td>
-                    </tr>
+                        <tr>
+                            <td>Topics covered</td>
+                            <td>{activity.topicCovers}</td>
+                        </tr>
 
-                    <tr>
-                        <td>Topics covered</td>
-                        <td>{activity.topicCovers}</td>
-                    </tr>
+                        <tr>
+                            <td>Cohort Date</td>
+                            <td>{activity.cohortDate}</td>
+                        </tr>
 
-                    <tr>
-                        <td>Cohort Date</td>
-                        <td>{activity.cohortDate}</td>
-                    </tr>
+                        <tr>
+                            <td>Cohort Date And Time</td>
+                            <td>{activity.cohortDateAndTime}</td>
+                        </tr>
 
-                    <tr>
-                        <td>Cohort Date And Time</td>
-                        <td>{activity.cohortDateAndTime}</td>
-                    </tr>
+                        <tr>
+                            <td>Allow feedback</td>
+                            <td>{activity.feedbackStart + ""}</td>
+                        </tr>
 
-                    <tr>
-                        <td>Allow feedback</td>
-                        <td>{activity.feedbackStart + ""}</td>
-                    </tr>
-
-                    <tr>
-                        <td>Action</td>
-                        <td>
-                            <button
-                                type="button"
-                                onClick={handleDelete}
-                                disabled={loading}
-                            >
-                                Delete
-                            </button>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>Action</td>
+                            <td>
+                                <button
+                                    type="button"
+                                    onClick={handleDelete}
+                                    disabled={loading}
+                                >
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </>
