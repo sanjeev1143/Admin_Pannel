@@ -22,3 +22,14 @@ export const getCohortActivity = async () => {
         console.log(e);
     }
 };
+
+export const getNegative = async () => {
+    const cRef = collection(db, "negative");
+
+    try {
+        const data = await getDocs(cRef);
+        return data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    } catch (e) {
+        console.log(e);
+    }
+};
