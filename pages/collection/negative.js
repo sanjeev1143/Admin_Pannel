@@ -146,7 +146,7 @@ const NegativeCard = ({ emotion, onUpdate, onDelete }) => {
     };
 
     const handleDelete = async () => {
-        setLoading(false);
+        setLoading(true);
 
         const dbRef = doc(db, "negative", emotion.id);
         await deleteDoc(dbRef);

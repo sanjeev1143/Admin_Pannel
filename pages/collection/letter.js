@@ -1,65 +1,165 @@
-import { useState } from "react"
-import Index from "."
+import { useState, useEffect } from "react";
+import Index from ".";
 import { db } from "../api/config";
-import Display from "../../Display"
-import { addDoc, collection, deleteDoc, doc, updateDoc } from "firebase/firestore";
-
+import { deleteDoc, doc, updateDoc, setDoc } from "firebase/firestore";
+import { getData } from "../../api";
+import styles from "../../styles/Letter.module.css";
 
 function Letter() {
-    const [data, setData] = useState([]);
+    const [letters, setletters] = useState([]);
 
-    const [info, setInfo] = useState({
-        letter: ""
-    })
-    const dbRef = collection(db, "letter");
-    function save(val) {
-        setData(val)
-    }
-    function changed(e) {
-        setInfo((prv) => ({
-            ...prv, [e.target.name]: e.target.value
-        }))
-        console.log(info);
-    }
-    async function saveDt(e) {
+    const [emotion, setEmotion] = useState("");
+    const [letterText, setLetterText] = useState("");
+
+    const [loading, setLoading] = useState("");
+
+    useEffect(() => {
+        const run = async () => {
+            const response = await getData("letter");
+            setletters(response);
+        };
+
+        run();
+    }, []);
+
+    const handleChange = async (id, text) => {
+        const temp = [...letters];
+
+        for (let i = 0; i < temp.length; i++) {
+            if (temp[i].id == id) {
+                temp[i].letter = text;
+                break;
+            }
+        }
+
+        setletters(temp);
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const data = await addDoc(dbRef, info)
-        setInfo({
-            letter: ""
-        })
-    }
+        setLoading(true);
 
-    async function Dlt(id) {
-        const userDoc = doc(db, "letter", id);
-        await deleteDoc(userDoc);
-        setData(data);
-    }
-    async function update(id) {
-        // const userDoc = doc(Db, "Notes", props.id)
-        // await updateDoc(userDoc, change)
-    }
+        const temp = {
+            letter: letterText,
+        };
 
-    console.log(data);
+        const dbRef = doc(db, "letter", emotion);
+        await setDoc(dbRef, temp);
+
+        temp["id"] = emotion;
+        setletters([...letters, temp]);
+
+        setEmotion("");
+        setLetterText("");
+
+        setLoading(false);
+    };
+
+    const handleUpdate = async (data) => {
+        setLoading(true);
+
+        const temp = { ...data };
+
+        const id = temp.id;
+        delete temp["id"];
+
+        const dbRef = doc(db, "letter", id);
+        await updateDoc(dbRef, temp);
+
+        setLoading(false);
+    };
+
+    const handleDelete = async (id) => {
+        setLoading(true);
+
+        const dbRef = doc(db, "letter", id);
+        await deleteDoc(dbRef);
+
+        let temp = [...letters];
+
+        for (let i = 0; i < temp.length; i++) {
+            if (temp[i].id === id) {
+                temp.splice(i, 1);
+                break;
+            }
+        }
+
+        setletters(temp);
+
+        setLoading(false);
+    };
+
     return (
-        <div>
+        <div className={styles.main}>
             <Index />
-            <Display save={save} clname='letter' />
-            {data.map((val, ind) => (
-                <div key={ind}>
-                    <h1>letter:{val.letter}</h1>
-                    <button onClick={() => Dlt(val.id)}>Delete</button>
-                    <button onClick={update}>Update</button>
 
-                </div>
-            ))}
+            <form onSubmit={handleSubmit}>
+                <label>Emotion</label>
+                <input
+                    type="text"
+                    onChange={(e) => setEmotion(e.target.value)}
+                    value={emotion}
+                />
 
-            <form>
-                <label>letter</label>
-                <input type="text" name="letter" onChange={changed} value={info.letter} />
-                <button onClick={saveDt}>Save</button>
+                <label>Text On Letter</label>
+                <input
+                    type="text"
+                    onChange={(e) => setLetterText(e.target.value)}
+                    value={letterText}
+                />
+
+                <button type="submit" disabled={loading || !emotion.length}>
+                    Add
+                </button>
             </form>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Emotion</th>
+                        <th>Text On Card</th>
+                        <th>Update</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {letters.map((letter) => (
+                        <tr key={letter.id}>
+                            <td>{letter.id}</td>
+                            <td>
+                                <input
+                                    type="text"
+                                    value={letter.letter}
+                                    onChange={(e) =>
+                                        handleChange(letter.id, e.target.value)
+                                    }
+                                />
+                            </td>
+                            <td>
+                                <button
+                                    type="button"
+                                    onClick={() => handleUpdate(letter)}
+                                    disabled={loading}
+                                >
+                                    Update
+                                </button>
+                            </td>
+                            <td>
+                                <button
+                                    type="button"
+                                    onClick={() => handleDelete(letter.id)}
+                                    disabled={loading}
+                                >
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
-    )
+    );
 }
 
-export default Letter
+export default Letter;
