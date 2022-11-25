@@ -244,7 +244,7 @@ function Cohortactivity() {
                     onChange={changed}
                     value={info.feedbackStart}
                 >
-                    <option value={false}>Don't Allow</option>
+                    <option value={false}>Don&apos;t Allow</option>
                     <option value={true}>Allow</option>
                 </select>
 
