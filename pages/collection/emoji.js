@@ -100,23 +100,27 @@ function Emoji() {
             <Index />
 
             <table>
-                <tr>
-                    <th>Emotion</th>
-                    <th>Show</th>
-                </tr>
-                {emojis.map((val, i) => (
-                    <tr key={i}>
-                        <td>{val.emotion}</td>
-                        <td>
-                            <input
-                                type="checkbox"
-                                checked={!!val.id}
-                                disabled={loading}
-                                onChange={() => update(val)}
-                            />
-                        </td>
+                <thead>
+                    <tr>
+                        <th>Emotion</th>
+                        <th>Show</th>
                     </tr>
-                ))}
+                </thead>
+                <tbody>
+                    {emojis.map((val, i) => (
+                        <tr key={i}>
+                            <td>{val.emotion}</td>
+                            <td>
+                                <input
+                                    type="checkbox"
+                                    checked={!!val.id}
+                                    disabled={loading}
+                                    onChange={() => update(val)}
+                                />
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
             </table>
         </div>
     );

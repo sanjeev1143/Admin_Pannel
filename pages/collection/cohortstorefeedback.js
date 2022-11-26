@@ -8,7 +8,7 @@ const CohortStoreFeedback = () => {
 
     useEffect(() => {
         const run = async () => {
-            const response = await getData("CohortStoreFeedbacks");
+            const response = await getData("CohortStoreFeedback");
             setFeedbacks(response);
         };
 
