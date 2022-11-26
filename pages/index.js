@@ -21,7 +21,7 @@ export default function Home() {
             userRef.current.value === user.username &&
             passwordRef.current.value === user.password
         ) {
-            router.push("/collection");
+            router.push("/collection/emoji");
         }
         //
     }

@@ -81,6 +81,22 @@ function Index() {
                         <div className="navItem">negative</div>
                     </Link>
                     <hr />
+
+                    <Link
+                        href="/collection/negativebreathe"
+                        style={{ textDecoration: "none" }}
+                    >
+                        <div className="navItem">Neagtive Breathe</div>
+                    </Link>
+                    <hr />
+
+                    <Link
+                        href="/collection/negativelemon"
+                        style={{ textDecoration: "none" }}
+                    >
+                        <div className="navItem">Negative lemon</div>
+                    </Link>
+                    <hr />
                     <Link
                         href="/collection/phonelogindetails"
                         style={{ textDecoration: "none" }}
