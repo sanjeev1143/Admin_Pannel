@@ -1,104 +1,377 @@
-import { useEffect, useState } from "react"
-import Index from "."
+import { useEffect, useState } from "react";
+import Index from ".";
 import { db } from "../api/config";
-import Display from "../../Display"
-import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc } from "firebase/firestore";
+import { deleteDoc, setDoc, doc, updateDoc } from "firebase/firestore";
+import styles from "../../styles/NegativeBL.module.css";
+import { getData } from "../../api";
 
+const Negativebreathe = () => {
+    const [formData, setFormData] = useState({
+        emotion: "",
+        title: "",
+        para: "",
+        bullet1: "",
+        bullet2: "",
+        bullet3: "",
+        bullet4: "",
+        bullet5: "",
+        output: "",
+    });
 
-function Negativebreathe() {
     const [data, setData] = useState([]);
-    const [isUpdate, setIsUpdate] = useState(false);
-    const [show, setshow] = useState(false);
 
-    const [info, setInfo] = useState({
-        bullet1: "", bullet2: "", bullet3: "", bullet4: "", bullet5: "", output: "", para: "", title: ""
-    })
-
-
-    const dbRef = collection(db, "negative_breathe");
-
-
-
-    function changed(e) {
-        setInfo((prv) => ({
-            ...prv, [e.target.name]: e.target.value
-        }))
-        console.log(info);
-    }
-    async function saveDt(e) {
-        e.preventDefault();
-        setIsUpdate(false);
-        const userDoc = doc(db, "negative_breathe", "Anger")
-        await updateDoc(userDoc, info)
-        setInfo({
-            bullet1: "", bullet2: "", bullet3: "", bullet4: "", bullet5: "", output: "", para: "", title: ""
-        })
-    }
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-
-        const getData = async () => {
-            try {
-                const data = await getDocs(dbRef);
-                setData(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
-            } catch (e) {
-                console.log(e);
-            }
+        const run = async () => {
+            const response = await getData("negative_breathe");
+            console.log(response);
+            setData(response);
         };
-        getData();
-    })
 
+        run();
+    }, []);
 
-    async function update(id) {
-        setInfo(data[0])
-        setIsUpdate(true);
-    }
-    console.log(info);
-    return (
-        <div>
-            <button onClick={() => { setshow(true) }}>show</button>
-            {show ?
-                (data.map((val, ind) => (
-                    isUpdate ? <form>
-                        <label>bullet1</label>
-                        <input type="text" name="bullet1" onChange={changed} value={info.bullet1} />
-                        <label>bullet2</label>
-                        <input type="text" name="bullet2" onChange={changed} value={info.bullet2} />
-                        <label>bullet3</label>
-                        <input type="text" name="bullet3" onChange={changed} value={info.bullet3} />
-                        <label>bullet4</label>
-                        <input type="text" name="bullet4" onChange={changed} value={info.bullet4} />
-                        <label>bullet5</label>
-                        <input type="text" name="bullet5" onChange={changed} value={info.bullet5} />
+    const handleChange = (key, value) => {
+        const temp = { ...formData };
+        temp[key] = value;
+        setFormData(temp);
+    };
 
-                        <label>output</label>
-                        <input type="text" name="output" onChange={changed} value={info.output} />
-                        <label>para</label>
-                        <input type="text" name="para" onChange={changed} value={info.para} />
-                        <label>title</label>
-                        <input type="text" name="title" onChange={changed} value={info.title} />
-                        <button onClick={saveDt}>Save</button>
-                    </form> :
-                        <div key={ind}>
-                            <div key={ind}>
-                                <h1>bullet1:{val.bullet1}</h1>
-                                <h1>bullet2:{val.bullet2}</h1>
-                                <h1>bullet3:{val.bullet3}</h1>
-                                <h1>bullet4:{val.bullet4}</h1>
-                                <h1>bullet5:{val.bullet5}</h1>
-                                <h1>output:{val.output}</h1>
-                                <h1>para:{val.para}</h1>
-                                <h1>title:{val.title}</h1>
-                                <button onClick={() => Dlt(val.id)}>Delete</button>
-                                <button onClick={update}>Update</button>
+    const handleDelete = (id) => {
+        let temp = [...data];
 
-                            </div>
-                        </div>
-                ))
-                ) : null
+        for (let i = 0; i < temp.length; i++) {
+            if (temp[i].id === id) {
+                temp.splice(i, 1);
+                break;
             }
-        </div>
-    )
-}
+        }
 
-export default Negativebreathe
+        setData(temp);
+    };
+
+    const handleUpdate = (id, newData) => {
+        let temp = [...data];
+
+        for (let i = 0; i < temp.length; i++) {
+            if (temp[i].id === id) {
+                temp[i] = newData;
+                break;
+            }
+        }
+
+        setData(temp);
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        setLoading(true);
+
+        const temp = { ...formData };
+        delete temp["emotion"];
+
+        const dbRef = doc(db, "negative_breathe", formData.emotion);
+        await setDoc(dbRef, temp);
+
+        temp["id"] = formData.emotion;
+        setData([...data, temp]);
+
+        resetFormData();
+
+        setLoading(false);
+    };
+
+    const resetFormData = () => {
+        setFormData({
+            emotion: "",
+            title: "",
+            para: "",
+            bullet1: "",
+            bullet2: "",
+            bullet3: "",
+            bullet4: "",
+            bullet5: "",
+            output: "",
+        });
+    };
+
+    return (
+        <div className={styles.main}>
+            <Index />
+
+            <form onSubmit={handleSubmit}>
+                <label>Emotion</label>
+                <input
+                    type="text"
+                    onChange={(e) => handleChange("emotion", e.target.value)}
+                    value={formData.emotion}
+                />
+
+                <label>Title</label>
+                <input
+                    type="text"
+                    onChange={(e) => handleChange("title", e.target.value)}
+                    value={formData.title}
+                />
+
+                <label>Paragraph</label>
+                <input
+                    type="text"
+                    onChange={(e) => handleChange("para", e.target.value)}
+                    value={formData.para}
+                />
+
+                <label>Bullet 1</label>
+                <input
+                    type="text"
+                    onChange={(e) => handleChange("bullet1", e.target.value)}
+                    value={formData.bullet1}
+                />
+
+                <label>Bullet 2</label>
+                <input
+                    type="text"
+                    onChange={(e) => handleChange("bullet2", e.target.value)}
+                    value={formData.bullet2}
+                />
+
+                <label>Bullet 3</label>
+                <input
+                    type="text"
+                    onChange={(e) => handleChange("bullet3", e.target.value)}
+                    value={formData.bullet3}
+                />
+
+                <label>Bullet 4</label>
+                <input
+                    type="text"
+                    onChange={(e) => handleChange("bullet4", e.target.value)}
+                    value={formData.bullet4}
+                />
+
+                <label>Bullet 5</label>
+                <input
+                    type="text"
+                    onChange={(e) => handleChange("bullet5", e.target.value)}
+                    value={formData.bullet5}
+                />
+
+                <label>Output</label>
+                <input
+                    type="text"
+                    onChange={(e) => handleChange("output", e.target.value)}
+                    value={formData.output}
+                />
+
+                <button
+                    type="submit"
+                    disabled={loading || !formData.emotion.length}
+                >
+                    Add
+                </button>
+            </form>
+
+            <div className={styles.cards}>
+                {data.map((emotion) => (
+                    <NegativebreatheCard
+                        key={emotion.id}
+                        data={emotion}
+                        onUpdate={handleUpdate}
+                        onDelete={handleDelete}
+                    />
+                ))}
+            </div>
+        </div>
+    );
+};
+
+export default Negativebreathe;
+
+const NegativebreatheCard = ({ data, onUpdate, onDelete }) => {
+    const [formData, setFormData] = useState({
+        title: "",
+        para: "",
+        bullet1: "",
+        bullet2: "",
+        bullet3: "",
+        bullet4: "",
+        bullet5: "",
+        output: "",
+    });
+
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        const temp = { ...data };
+        delete temp["id"];
+        setFormData(temp);
+    }, [data]);
+
+    const handleChange = (key, value) => {
+        const temp = { ...formData };
+        temp[key] = value;
+        setFormData(temp);
+    };
+
+    const handleUpdate = async () => {
+        setLoading(true);
+
+        const dbRef = doc(db, "negative_breathe", data.id);
+        await updateDoc(dbRef, formData);
+
+        onUpdate(data.id, { ...formData, id: data.id });
+
+        setLoading(false);
+    };
+
+    const handleDelete = async () => {
+        setLoading(true);
+
+        const dbRef = doc(db, "negative_breathe", data.id);
+        await deleteDoc(dbRef);
+
+        onDelete(data.id);
+
+        setLoading(false);
+    };
+
+    return (
+        <>
+            <div className={styles.card}>
+                <p>{data.id}</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Key</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Title</td>
+                            <td>
+                                <input
+                                    type="text"
+                                    onChange={(e) =>
+                                        handleChange("title", e.target.value)
+                                    }
+                                    value={formData.title}
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Paragraph</td>
+                            <td>
+                                <input
+                                    type="text"
+                                    onChange={(e) =>
+                                        handleChange("para", e.target.value)
+                                    }
+                                    value={formData.para}
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Bullet 1</td>
+                            <td>
+                                <input
+                                    type="text"
+                                    onChange={(e) =>
+                                        handleChange("bullet1", e.target.value)
+                                    }
+                                    value={formData.bullet1}
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Bulet 2</td>
+                            <td>
+                                <input
+                                    type="text"
+                                    onChange={(e) =>
+                                        handleChange("bullet2", e.target.value)
+                                    }
+                                    value={formData.bullet2}
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Bullet 3</td>
+                            <td>
+                                <input
+                                    type="text"
+                                    onChange={(e) =>
+                                        handleChange("bullet3", e.target.value)
+                                    }
+                                    value={formData.bullet3}
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Bullet 4</td>
+                            <td>
+                                <input
+                                    type="text"
+                                    onChange={(e) =>
+                                        handleChange("bullet4", e.target.value)
+                                    }
+                                    value={formData.bullet4}
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Bullet 5</td>
+                            <td>
+                                <input
+                                    type="text"
+                                    onChange={(e) =>
+                                        handleChange("bullet5", e.target.value)
+                                    }
+                                    value={formData.bullet5}
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Output</td>
+                            <td>
+                                <input
+                                    type="text"
+                                    onChange={(e) =>
+                                        handleChange("output", e.target.value)
+                                    }
+                                    value={formData.output}
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Update</td>
+                            <td>
+                                <button
+                                    type="button"
+                                    onClick={handleUpdate}
+                                    disabled={loading}
+                                >
+                                    Update
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Delete</td>
+                            <td>
+                                <button
+                                    type="button"
+                                    onClick={handleDelete}
+                                    disabled={loading}
+                                >
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </>
+    );
+};
